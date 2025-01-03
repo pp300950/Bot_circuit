@@ -88,13 +88,25 @@ def draw_grid():
             pygame.draw.rect(screen, GRAY, rect, 1)
 
 def draw_laser(path):
-    for x, y in path:
-        rect = pygame.Rect(x * GRID_SIZE, y * GRID_SIZE, GRID_SIZE, GRID_SIZE)
-        pygame.draw.rect(screen, YELLOW, rect)
-        # เพิ่มตัวเลข 15 ในเซลล์สีเหลือง
-        font = pygame.font.SysFont(None, 24)
+    font = pygame.font.SysFont(None, 24)  # กำหนดฟอนต์สำหรับตัวเลข
+    for i in range(len(path)):
+        x, y = path[i]
+
+        # คำนวณจุดกึ่งกลางของเซลล์
+        center_x = x * GRID_SIZE + GRID_SIZE // 2
+        center_y = y * GRID_SIZE + GRID_SIZE // 2
+
+        # วาดเส้นเลเซอร์ระหว่างเซลล์
+        if i < len(path) - 1:  # ตรวจสอบว่ามีเซลล์ถัดไปหรือไม่
+            next_x, next_y = path[i + 1]
+            next_center_x = next_x * GRID_SIZE + GRID_SIZE // 2
+            next_center_y = next_y * GRID_SIZE + GRID_SIZE // 2
+            pygame.draw.line(screen, YELLOW, (center_x, center_y), (next_center_x, next_center_y), 5)  # ความหนา 5
+
+        # วาดตัวเลข 15 ในแต่ละเซลล์
         text = font.render("15", True, BLACK)
-        screen.blit(text, (x * GRID_SIZE + GRID_SIZE // 4, y * GRID_SIZE + GRID_SIZE // 4))
+        screen.blit(text, (center_x - 10, center_y - 10))  # ตำแหน่งของตัวเลข
+
 
 def draw_menu(x, y):
     global menu_rects
